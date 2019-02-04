@@ -105,8 +105,10 @@ export abstract class GraphQLProject implements GraphQLSchemaProvider {
     this._isReady = false;
     // FIXME: Instead of `Promise.all`, we should catch individual promise rejections
     // so we can show multiple errors.
+    console.time("GraphQLProject#initialize");
     this.readyPromise = Promise.all(this.initialize())
       .then(() => {
+        console.timeEnd("GraphQLProject#initialize");
         this._isReady = true;
         this.invalidate();
       })
@@ -167,6 +169,7 @@ export abstract class GraphQLProject implements GraphQLSchemaProvider {
   }
 
   async scanAllIncludedFiles() {
+    console.time("GraphQLProject#scanAllIncludedFiles");
     await this.loadingHandler.handle(
       `Loading queries for ${this.displayName}`,
       (async () => {
@@ -181,6 +184,7 @@ export abstract class GraphQLProject implements GraphQLSchemaProvider {
         }
       })()
     );
+    console.timeEnd("GraphQLProject#scanAllIncludedFiles");
   }
 
   fileDidChange(uri: DocumentUri) {

@@ -40,11 +40,14 @@ export default class ClientExtract extends ClientCommand {
   ];
 
   async run() {
+    console.time("ClientExtract#run");
+
     const { clientIdentity, operations, filename }: any = await this.runTasks(
       ({ flags, project, config, args }) => [
         {
           title: "Extracting operations from project",
           task: async ctx => {
+            console.time("Extracting operations from project");
             const operations = Object.values(
               this.project.mergedOperationsAndFragmentsForService
             ).map(operationAST => {
@@ -66,11 +69,14 @@ export default class ClientExtract extends ClientCommand {
 
             ctx.operations = operations;
             ctx.clientIdentity = config.client;
+            console.timeEnd("Extracting operations from project");
           }
         },
         {
           title: "Outputing extracted queries",
           task: (ctx, task) => {
+            console.time("Outputing extracted queries");
+
             const filename = args.output;
             task.title = "Outputing extracted queries to " + filename;
             ctx.filename = filename;
@@ -82,6 +88,9 @@ export default class ClientExtract extends ClientCommand {
                 2
               )
             );
+            console.timeEnd("Outputing extracted queries");
+            console.log("\n");
+            console.log("\n");
           }
         }
       ]
@@ -92,5 +101,7 @@ export default class ClientExtract extends ClientCommand {
         clientIdentity.name
       } client to ${filename}`
     );
+
+    console.timeEnd("ClientExtract#run");
   }
 }

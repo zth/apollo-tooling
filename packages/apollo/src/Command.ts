@@ -102,6 +102,7 @@ export abstract class ProjectCommand extends Command {
   private ctx!: ProjectContext;
 
   async init() {
+    console.time("ProjectCommand#init");
     const { flags, args } = this.parse(this.constructor as any);
     this.ctx = { flags, args } as any;
 
@@ -117,9 +118,12 @@ export abstract class ProjectCommand extends Command {
         ctx = { ...ctx, ...this.ctx };
       }
     });
+    console.timeEnd("ProjectCommand#init");
   }
 
   protected async createConfig(flags: Flags) {
+    console.time("ProjectCommand#createConfig");
+
     const service = flags.key ? getServiceFromKey(flags.key) : undefined;
     const config = await loadConfig({
       configPath: flags.config && parse(resolve(flags.config)).dir,
@@ -174,10 +178,14 @@ export abstract class ProjectCommand extends Command {
       config.setDefaults(defaults);
     }
 
+    console.timeEnd("ProjectCommand#createConfig");
+
     return config;
   }
 
   protected createService(config: ApolloConfig, flags: Flags) {
+    console.time("ProjectCommand#createService");
+
     const loadingHandler = new OclifLoadingHandler(this);
 
     // When no config is provided, configURI === process.cwd()
@@ -194,6 +202,7 @@ export abstract class ProjectCommand extends Command {
       referenceID
     };
 
+    console.time("new GraphQLProject");
     if (isServiceConfig(config)) {
       this.project = new GraphQLServiceProject({
         config,
@@ -213,8 +222,10 @@ export abstract class ProjectCommand extends Command {
         "Unable to resolve project type. Please add either a client or service config. For more information, please refer to https://bit.ly/2ByILPj"
       );
     }
+    console.timeEnd("new GraphQLProject");
 
     this.ctx.project = this.project;
+    console.timeEnd("ProjectCommand#createService");
   }
 
   async runTasks<Result>(

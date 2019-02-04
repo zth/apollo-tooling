@@ -40,6 +40,8 @@ export default class ClientCheck extends ClientCommand {
   };
 
   async run() {
+    console.time("ClientCheck#run");
+
     const { validationResults, operations } = await this.runTasks<{
       operations: Operation[];
       validationResults: ValidationResult[];
@@ -47,6 +49,7 @@ export default class ClientCheck extends ClientCommand {
       {
         title: "Checking client compatibility with service",
         task: async ctx => {
+          console.time("Client check task");
           if (!config.name) {
             throw new Error("No service found to link to Engine");
           }
@@ -73,6 +76,7 @@ export default class ClientCheck extends ClientCommand {
             })),
             gitContext: ctx.gitContext
           });
+          console.timeEnd("Client check task");
         }
       }
     ]);
@@ -96,6 +100,8 @@ export default class ClientCheck extends ClientCommand {
     }
 
     this.printStats(validationResults, operations);
+
+    console.timeEnd("ClientCheck#run");
 
     // exit with failing status if there are any failures or invalid documents
     const hasFailures = validationResults.some(

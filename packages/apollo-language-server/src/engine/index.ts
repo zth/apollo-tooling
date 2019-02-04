@@ -166,29 +166,38 @@ export class ApolloEngineClient extends GraphQLDataSource {
     });
   }
 
-  public async validateOperations(variables: ValidateOperationsVariables) {
-    return this.execute({ query: VALIDATE_OPERATIONS, variables }).then(
-      ({ data, errors }) => {
-        // use error logger
-        if (errors) {
-          throw new Error(errors.map(error => error.message).join("\n"));
-        }
-
-        if (data && !data.service) {
-          throw new Error(
-            noServiceError(getServiceFromKey(this.engineKey), this.baseURL)
-          );
-        }
-
-        if (!data) {
-          throw new Error("Error in request from Engine");
-        }
-
-        return data.service.validateOperations
-          .validationResults as ValidationResult[];
+  public validateOperations = async (
+    variables: ValidateOperationsVariables
+  ) => {
+    console.time("ApolloEngineClient#validateOperations");
+    const result = await this.execute({
+      query: VALIDATE_OPERATIONS,
+      variables
+    }).then(({ data, errors }) => {
+      // use error logger
+      if (errors) {
+        throw new Error(errors.map(error => error.message).join("\n"));
       }
-    );
-  }
+
+      if (data && !data.service) {
+        throw new Error(
+          noServiceError(getServiceFromKey(this.engineKey), this.baseURL)
+        );
+      }
+
+      if (!data) {
+        throw new Error("Error in request from Engine");
+      }
+
+      return data.service.validateOperations
+        .validationResults as ValidationResult[];
+    });
+    console.log("");
+    console.timeEnd("ApolloEngineClient#validateOperations");
+    console.log("\n");
+
+    return result;
+  };
 
   public async registerOperations(variables: RegisterOperationsVariables) {
     return this.execute({ query: REGISTER_OPERATIONS, variables }).then(
