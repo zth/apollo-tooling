@@ -3,7 +3,7 @@ import {
   NotificationHandler,
   PublishDiagnosticsParams
 } from "vscode-languageserver";
-import { QuickPickItem } from "vscode";
+// import { QuickPickItem } from "vscode";
 import { GraphQLProject, DocumentUri } from "./project/base";
 import { dirname } from "path";
 import * as fg from "glob";
@@ -196,7 +196,7 @@ export class GraphQLWorkspace {
     }
   }
 
-  updateSchemaTag(selection: QuickPickItem) {
+  updateSchemaTag(selection: any) {
     const serviceID = selection.detail;
     if (!serviceID) return;
 

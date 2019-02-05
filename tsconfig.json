@@ -12,7 +12,6 @@
     { "path": "./packages/apollo-codegen-swift" },
     { "path": "./packages/apollo-codegen-typescript" },
     { "path": "./packages/apollo-language-server" },
-    { "path": "./packages/vscode-apollo" },
-    { "path": "./packages/apollo-tools" },
+    { "path": "./packages/apollo-tools" }
   ]
 }
