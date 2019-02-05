@@ -49,12 +49,17 @@ export default class ClientCheck extends ClientCommand {
       {
         title: "Checking client compatibility with service",
         task: async ctx => {
-          console.time("Client check task");
           if (!config.name) {
             throw new Error("No service found to link to Engine");
           }
+
+          console.time("Checktask#gitInfo");
           ctx.gitContext = await gitInfo();
 
+          console.timeEnd("Checktask#gitInfo");
+          console.log("\n");
+
+          console.time("Checktask#buildArgs");
           ctx.operations = Object.entries(
             this.project.mergedOperationsAndFragmentsForService
           ).map(([name, doc]) => ({
@@ -67,6 +72,10 @@ export default class ClientCheck extends ClientCommand {
             locationOffset: doc.definitions[0].loc!.source.locationOffset
           }));
 
+          console.timeEnd("Checktask#buildArgs");
+          console.log("\n");
+
+          console.time("Checktask#validateOperations");
           ctx.validationResults = await project.engine.validateOperations({
             id: config.name,
             tag: config.tag,
@@ -76,7 +85,9 @@ export default class ClientCheck extends ClientCommand {
             })),
             gitContext: ctx.gitContext
           });
-          console.timeEnd("Client check task");
+
+          console.timeEnd("Checktask#validateOperations");
+          console.log("\n");
         }
       }
     ]);
@@ -94,6 +105,7 @@ export default class ClientCheck extends ClientCommand {
     );
 
     if (validationResults.length === 0) {
+      console.timeEnd("ClientCheck#run");
       return this.log(
         chalk.green("\nAll operations are valid against service\n")
       );
@@ -101,14 +113,15 @@ export default class ClientCheck extends ClientCommand {
 
     this.printStats(validationResults, operations);
 
-    console.timeEnd("ClientCheck#run");
-
     // exit with failing status if there are any failures or invalid documents
     const hasFailures = validationResults.some(
       ({ type }: ValidationResult) =>
         type === ValidationErrorType.FAILURE ||
         type === ValidationErrorType.INVALID
     );
+
+    console.timeEnd("ClientCheck#run");
+
     if (hasFailures) {
       this.exit();
     }

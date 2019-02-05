@@ -169,7 +169,6 @@ export class ApolloEngineClient extends GraphQLDataSource {
   public validateOperations = async (
     variables: ValidateOperationsVariables
   ) => {
-    console.time("ApolloEngineClient#validateOperations");
     const result = await this.execute({
       query: VALIDATE_OPERATIONS,
       variables
@@ -192,9 +191,6 @@ export class ApolloEngineClient extends GraphQLDataSource {
       return data.service.validateOperations
         .validationResults as ValidationResult[];
     });
-    console.log("");
-    console.timeEnd("ApolloEngineClient#validateOperations");
-    console.log("\n");
 
     return result;
   };
