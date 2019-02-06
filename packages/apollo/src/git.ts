@@ -41,8 +41,14 @@ export const gitInfo = async (): Promise<GitContext | undefined> => {
   // https://github.com/pvdlg/env-ci#caveats
   //
   // slug is formatted as follows: ${organization}/${repository name}
+
+  console.time("gitInfo#ci()");
   const { isCi, commit, branch: ciBranch, slug, root, prBranch } = ci();
+  console.timeEnd("gitInfo#ci()");
+
+  console.time("gitInfo#findGitRoot()");
   const gitLoc = root ? root : findGitRoot();
+  console.timeEnd("gitInfo#findGitRoot()");
 
   if (!commit) return;
 
@@ -55,6 +61,7 @@ export const gitInfo = async (): Promise<GitContext | undefined> => {
   // In order to use git-parse and git-rev-sync, we must ensure that a git context is
   // accessible. Without this check, the commands would throw
   if (gitLoc) {
+    console.time("gitInfo#gitToJs()");
     const { authorName, authorEmail, ...commit } = await gitToJs(gitLoc)
       .then((commits: Commit[]) =>
         commits && commits.length > 0
@@ -62,6 +69,7 @@ export const gitInfo = async (): Promise<GitContext | undefined> => {
           : { authorName: null, authorEmail: null, message: null }
       )
       .catch(() => ({ authorEmail: null, authorName: null, message: null }));
+    console.timeEnd("gitInfo#gitToJs()");
 
     committer = `${authorName || ""} ${
       authorEmail ? `<${authorEmail}>` : ""
@@ -71,7 +79,9 @@ export const gitInfo = async (): Promise<GitContext | undefined> => {
 
     if (!isCi) {
       try {
+        console.time("gitInfo#git.remoteUrl()");
         remoteUrl = git.remoteUrl();
+        console.timeEnd("gitInfo#git.remoteUrl()");
       } catch (e) {}
     }
 
@@ -81,7 +91,9 @@ export const gitInfo = async (): Promise<GitContext | undefined> => {
     // See https://github.com/pvdlg/env-ci#caveats for a detailed list of when
     // branch can be undefined
     if (!branch) {
+      console.time("gitInfo#git.branch()");
       branch = git.branch();
+      console.timeEnd("gitInfo#git.branch()");
     }
   }
 
