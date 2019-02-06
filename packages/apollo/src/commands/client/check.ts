@@ -36,6 +36,9 @@ export default class ClientCheck extends ClientCommand {
     tag: flags.string({
       char: "t",
       description: "The published tag to check this client against"
+    }),
+    skipGit: flags.boolean({
+      default: false
     })
   };
 
@@ -45,7 +48,7 @@ export default class ClientCheck extends ClientCommand {
     const { validationResults, operations } = await this.runTasks<{
       operations: Operation[];
       validationResults: ValidationResult[];
-    }>(({ project, config }) => [
+    }>(({ project, config, flags }) => [
       {
         title: "Checking client compatibility with service",
         task: async ctx => {
@@ -53,11 +56,12 @@ export default class ClientCheck extends ClientCommand {
             throw new Error("No service found to link to Engine");
           }
 
-          console.time("Checktask#gitInfo");
-          ctx.gitContext = await gitInfo();
-
-          console.timeEnd("Checktask#gitInfo");
-          console.log("\n");
+          if (!flags.skipGit) {
+            console.time("Checktask#gitInfo");
+            ctx.gitContext = await gitInfo();
+            console.timeEnd("Checktask#gitInfo");
+            console.log("\n");
+          }
 
           console.time("Checktask#buildArgs");
           ctx.operations = Object.entries(
