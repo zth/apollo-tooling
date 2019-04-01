@@ -15,8 +15,8 @@ import gql from "graphql-tag";
 const test = setup.do(() => mockConsole());
 
 // helper function to resolve files from the actual filesystem
-const resolveFiles = opts => {
-  let files = {};
+const resolveFiles = (opts: { [key: string]: string }) => {
+  const files: { [key: string]: string } = {};
   Object.keys(opts).map(key => {
     files[key] = fs.readFileSync(path.resolve(__dirname, opts[key]), {
       encoding: "utf-8"
@@ -376,9 +376,7 @@ describe("client:codegen", () => {
       expect(output).toMatchSnapshot();
     });
 
-  // TODO: fix UnhandledPromiseRejection
   test
-    .skip()
     .fs({
       "schema.json": fullSchemaJsonString,
       "components/component.tsx": `
@@ -445,9 +443,7 @@ describe("client:codegen", () => {
       }
     );
 
-  // TODO: fix
   test
-    .skip()
     .fs({
       "schema.json": fullSchemaJsonString,
       "components/component.tsx": `
@@ -477,8 +473,10 @@ describe("client:codegen", () => {
       () => {
         expect(
           fs.readFileSync("components/__foo__/SimpleQuery.ts").toString()
-        ).toEqual();
-        expect(fs.readFileSync("__foo__/globalTypes.ts").toString()).toEqual();
+        ).toMatchSnapshot();
+        expect(
+          fs.readFileSync("__foo__/globalTypes.ts").toString()
+        ).toMatchSnapshot();
       }
     );
 
