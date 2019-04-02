@@ -410,9 +410,7 @@ describe("client:codegen", () => {
       }
     );
 
-  // TODO: fix
   test
-    .skip()
     .fs({
       "schema.json": fullSchemaJsonString,
       "components/component.jsx": `
