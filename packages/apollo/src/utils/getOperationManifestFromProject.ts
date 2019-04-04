@@ -24,8 +24,8 @@ export function getOperationManifestFromProject(
     );
 
     return {
-      signature: operationHash(printed),
-      document: printed,
+      signature: "",
+      document: "",
       // TODO: unused. Remove or repurpose this field altogether with op. registry 2.0 work.
       // For now, this field is non-nullable on the input type.
       metadata: {
