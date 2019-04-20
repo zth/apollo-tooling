@@ -243,7 +243,9 @@ export default class ServiceCheck extends ProjectCommand {
           const tag = flags.tag || config.tag || "current";
 
           if (!configName) {
-            throw new Error("No service found to link to Engine");
+            throw new Error(
+              "Cannot find a service name. Try adding a service name or API key."
+            );
           }
 
           return [
