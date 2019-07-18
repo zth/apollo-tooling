@@ -3,7 +3,8 @@
 ## Upcoming
 
 - `apollo`
-  - <First `apollo` related entry goes here>
+  - `service:push`
+    - `overrideComposedSchema` option added, which allows schemas to be force-pushed directly to federated graphs
 - `apollo-codegen-core`
   - <First `apollo-codegen-core` related entry goes here>
 - `apollo-codegen-flow`
