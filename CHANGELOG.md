@@ -10,7 +10,7 @@
   - <First `apollo-codegen-flow` related entry goes here>
 - `apollo-codegen-scala`
   - <First `apollo-codegen-scala` related entry goes here>
-- `apollo-codegen-swift` 
+- `apollo-codegen-swift`
   - Revert changes from [#656](https://github.com/apollographql/apollo-tooling/pull/656) due to build issues not caught by tests.
 - `apollo-codegen-typescript`
   - <First `apollo-codegen-typescript` related entry goes here>
@@ -20,6 +20,7 @@
   - <First `apollo-graphql` related entry goes here>
 - `apollo-language-server`
   - Fix dirname parsing for ts config files [#1463](https://github.com/apollographql/apollo-tooling/pull/1463)
+  - Add warning for duplicate client operation names [#1466](https://github.com/apollographql/apollo-tooling/pull/1466)
 - `apollo-tools`
   - <First `apollo-tools` related entry goes here>
 - `vscode-apollo`
