@@ -3,14 +3,14 @@
 ## Upcoming
 
 - `apollo`
-  - Add `--compactOutput` flag to `service:check` [#1404](https://github.com/apollographql/apollo-tooling/pull/1404)
+  - Shorten `client:check` and `service:check` output in CI [#1404](https://github.com/apollographql/apollo-tooling/pull/1404)
 - `apollo-codegen-core`
   - <First `apollo-codegen-core` related entry goes here>
 - `apollo-codegen-flow`
   - <First `apollo-codegen-flow` related entry goes here>
 - `apollo-codegen-scala`
   - <First `apollo-codegen-scala` related entry goes here>
-- `apollo-codegen-swift` 
+- `apollo-codegen-swift`
   - Revert changes from [#656](https://github.com/apollographql/apollo-tooling/pull/656) due to build issues not caught by tests.
 - `apollo-codegen-typescript`
   - <First `apollo-codegen-typescript` related entry goes here>
